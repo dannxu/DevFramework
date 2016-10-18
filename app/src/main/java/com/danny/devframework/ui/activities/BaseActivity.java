@@ -3,9 +3,9 @@ package com.danny.devframework.ui.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.danny.devframework.R;
@@ -16,7 +16,7 @@ import com.danny.devframework.ui.fragments.BaseFragment;
  * Created by danny on 10/17/16.
  */
 
-public abstract class BaseActivity extends FragmentActivity implements FragmentCallbacks {
+public abstract class BaseActivity extends AppCompatActivity implements FragmentCallbacks {
 
     protected static final String TAG = "BaseActivity";
 

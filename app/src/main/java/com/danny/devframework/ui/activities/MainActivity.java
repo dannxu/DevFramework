@@ -1,7 +1,9 @@
-package com.danny.devframework;
+package com.danny.devframework.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.danny.devframework.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -9,6 +9,9 @@ import org.json.JSONObject;
 
 public class Account extends DataObject {
 
+    private String  mUsername;
+    private String  mPassword;
+
     public Account()
     {
 
