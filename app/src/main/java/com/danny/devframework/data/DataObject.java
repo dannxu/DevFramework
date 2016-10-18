@@ -3,6 +3,8 @@ package com.danny.devframework.data;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.danny.devframework.utils.DataCallbacksUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +48,23 @@ abstract class DataObject {
         Log.d(TAG, "registerCallbacks");
         if (aCallbacks != null)
         {
+            DataCallbacksUtils.getInstance().post(new RegisterRunnable(aCallbacks));
+        }
+    }
+
+    private class RegisterRunnable implements Runnable
+    {
+        private DataCallbacks mCallbacks;
+        RegisterRunnable(DataCallbacks aCallbacks)
+        {
+            mCallbacks = aCallbacks;
+        }
+
+        @Override
+        public void run()
+        {
+            Log.d(TAG, "run");
+
             if (mCallbackList == null)
             {
                 mCallbackList = new ArrayList<>();
@@ -56,18 +75,18 @@ abstract class DataObject {
                 for (WeakReference<DataCallbacks> callbacks : mCallbackList)
                 {
                     DataCallbacks cb = callbacks.get();
-                    if (cb == aCallbacks)
+                    if (cb == mCallbacks)
                     {
                         return;
                     }
                 }
             }
 
-            WeakReference<DataCallbacks> callbacks = new WeakReference<>(aCallbacks);
+            WeakReference<DataCallbacks> callbacks = new WeakReference<>(mCallbacks);
 
             if (!mCallbackList.contains(callbacks))
             {
-                Log.d(TAG, "registerCallbacks");
+                Log.d(TAG, "add callback to list");
                 mCallbackList.add(callbacks);
             }
         }
@@ -78,13 +97,29 @@ abstract class DataObject {
         Log.d(TAG, "unregisterCallbacks");
         if (aCallbacks != null && mCallbackList != null)
         {
+            DataCallbacksUtils.getInstance().post(new UnregisterRunnable(aCallbacks));
+        }
+    }
+
+    private class UnregisterRunnable implements Runnable
+    {
+        private DataCallbacks mCallbacks;
+
+        UnregisterRunnable(DataCallbacks aCallbacks)
+        {
+            mCallbacks = aCallbacks;
+        }
+
+        @Override
+        public void run()
+        {
             WeakReference<DataCallbacks> rm = null;
             if (!mCallbackList.isEmpty())
             {
                 for (WeakReference<DataCallbacks> callbacks : mCallbackList)
                 {
                     DataCallbacks cb = callbacks.get();
-                    if (cb == aCallbacks)
+                    if (cb == mCallbacks)
                     {
                         rm = callbacks;
                         break;
@@ -94,6 +129,7 @@ abstract class DataObject {
 
             if (rm != null)
             {
+                Log.d(TAG, "remove callback from list");
                 mCallbackList.remove(rm);
             }
         }
